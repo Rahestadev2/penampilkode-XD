@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#050403">
-<title>Pencarian data  | ExamDigital</title>
+<title>Pencarian data NPSN | ExamDigital</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -85,7 +85,7 @@
   @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
   .card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; flex-wrap: wrap; }
   .lbl { display: block; color: var(--muted); font-size: .8rem; margin-bottom: 2px; }
-  .Kode{ font-family: var(--serif); font-size: 1.9rem; font-weight: 600; line-height: 1.1; color: var(--gold-hi); letter-spacing: .06em; font-variant-numeric: lining-nums; }
+  .npsn { font-family: var(--serif); font-size: 1.9rem; font-weight: 600; line-height: 1.1; color: var(--gold-hi); letter-spacing: .06em; font-variant-numeric: lining-nums; }
   .time {
     padding: 5px 14px; border: 1px solid var(--gold); border-radius: 999px;
     color: var(--gold-hi); font-size: .88rem; white-space: nowrap; background: rgba(217,184,120,.08);
@@ -201,7 +201,7 @@
     <div class="halo"></div>
     <img class="logo" id="introLogo" alt="Logo ExamDigital">
     <div class="sheen" id="introSheen"></div>
-    <div class="caption"><div class="rule"></div><div class="t">Pencarian data </div></div>
+    <div class="caption"><div class="rule"></div><div class="t">Pencarian data NPSN</div></div>
   </div>
   <button id="skip" type="button">Lewati</button>
 </div>
@@ -209,17 +209,17 @@
 <div class="wrap" id="main" inert>
   <header>
     <img id="headLogo" alt="ExamDigital">
-    <h1>Pencarian data </h1>
-    <p class="sub">Masukkan Kode untuk melihat keterangan dan tautannya.</p>
+    <h1>Pencarian data NPSN</h1>
+    <p class="sub">Masukkan NPSN untuk melihat keterangan dan tautannya.</p>
     <div class="rule"></div>
   </header>
 
   <div class="search" role="search">
-    <input id="Kode" type="search" inputmode="numeric" placeholder="Masukkan Kode" aria-label="Kode" autocomplete="off">
+    <input id="npsn" type="search" inputmode="numeric" placeholder="Masukkan NPSN" aria-label="NPSN" autocomplete="off">
     <button id="btnLoad" type="button">Cari</button>
   </div>
 
-  <div id="status" class="msg">Masukkan Kode lalu tekan Cari untuk menampilkan data.</div>
+  <div id="status" class="msg">Masukkan NPSN lalu tekan Cari untuk menampilkan data.</div>
 
   <div class="stats" id="stats" hidden>
     <span><strong id="sCount">0</strong> data</span>
@@ -234,7 +234,7 @@
   const API_URL = "https://script.google.com/macros/s/AKfycby7pSxPN9ciRdhlczSEs43sNtULry_vYAAVIk_90z13z68ZJGIlp2gENoa7rpQZlrSS/exec";
 
   const results = document.getElementById("results");
-  const input = document.getElementById("Kode");
+  const input = document.getElementById("npsn");
   const stats = document.getElementById("stats");
   const statusEl = document.getElementById("status");
   const btn = document.getElementById("btnLoad");
@@ -267,7 +267,7 @@
         : "";
       return `<article class="card" style="animation-delay:${i * 90}ms">
         <div class="card-top">
-          <div><span class="lbl">Kode</span><span class="Kode">${esc(r.Kode)}</span></div>
+          <div><span class="lbl">NPSN</span><span class="npsn">${esc(r.npsn)}</span></div>
           <span class="time${w === 0 ? " zero" : ""}">${w} menit</span>
         </div>
         <p class="ket">${esc(r.keterangan) || "-"}</p>
@@ -281,9 +281,9 @@
   }
 
   async function cari() {
-    const Kode= input.value.trim();
+    const npsn = input.value.trim();
     hideData();
-    if (!Kode) { setStatus("Masukkan Kodeterlebih dahulu."); return; }
+    if (!npsn) { setStatus("Masukkan NPSN terlebih dahulu."); return; }
     btn.disabled = true;
     setStatus('<div class="spinner"></div>Mencari data…');
     try {
@@ -293,11 +293,11 @@
         const data = await res.json();
         return Array.isArray(data) ? data : [];
       };
-      const cocok = (arr) => arr.filter(r => String(r.Kode).trim() === Kode);
+      const cocok = (arr) => arr.filter(r => String(r.npsn).trim() === npsn);
       // 1) filter di server; 2) jika kosong, ambil semua lalu cocokkan di halaman
-      let list = cocok(await ambil(`${API_URL}?Kode=${encodeURIComponent(Kode)}`));
+      let list = cocok(await ambil(`${API_URL}?npsn=${encodeURIComponent(npsn)}`));
       if (!list.length) list = cocok(await ambil(API_URL));
-      if (!list.length) setStatus("Data untuk Kode" + esc(Kode) + " tidak ditemukan.");
+      if (!list.length) setStatus("Data untuk NPSN " + esc(npsn) + " tidak ditemukan.");
       else render(list);
     } catch (err) {
       setStatus("Gagal memuat data (" + esc(err.message) + "). Pastikan Web App sudah di-deploy dengan akses “Anyone”.", true);
